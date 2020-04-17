@@ -1,0 +1,184 @@
+type Query {
+    ## Product service
+    allProducts: ProductItemData
+    productById(id: Int!): ProductItem
+    allProductModels: ProductModelItemData
+    productModelById(id: Int!): ProductModelItem
+    allDescriptions: DescriptionData
+    descriptionById(id: Int!): Description
+    ## Resource sevice
+    allBooks: BookData
+    bookById(id: Int!): Book
+    allSpecifications: SpecificationData
+    specificationById(id: Int!): Specification
+    allIndustryReports: IndustryReportData
+    industryReportById(id: Int!): IndustryReport
+}
+
+type Mutation {
+    ## Product service
+    createProduct(input: ProductCreateInput ): ProductItem
+    updateProduct(input: ProductUpdateInput ): ProductItem
+    createProductModel(input: ProductModelCreateInput ): ProductModelItem
+    updateProductModel(input: ProductModelUpdateInput ): ProductModelItem
+    createDescription(input: DescriptionCreateInput ): Description
+    updateDescription(input: DescriptionUpdateInput ): Description
+    ## Resource sevice
+    createBook(input: BookCreateInput!): Book
+    updateBook(input: BookUpdateInput!): Book
+    createIndustryReport(input: IndustryReportCreateInput!): IndustryReport
+    updateIndustryReport(input: IndustryReportUpdateInput!): IndustryReport
+    createSpecification(input: SpecificationCreateInput!): Specification
+    updateSpecification(input: SpecificationUpdateInput!): Specification
+}
+
+input ProductCreateInput {
+    productName: String!
+}
+
+input ProductUpdateInput {
+    id: ID!
+    productName: String!
+}
+
+input ProductModelCreateInput {
+    productId: Int!
+    modelName: String!
+    bookId: Int
+    industryReportId: Int
+    specificationReportId: Int
+}
+
+input ProductModelUpdateInput {
+    id: ID!
+    productId: Int
+    modelName: String
+    bookId: Int
+    industryReportId: Int
+    specificationReportId: Int
+}
+
+input DescriptionCreateInput {
+    modelId: Int!
+    descriptionLine: String!
+}
+
+input DescriptionUpdateInput {
+    id: ID!
+    modelId: Int
+    descriptionLine: String
+}
+
+input BookUpdateInput {
+    id: ID!
+    text: String
+    description: String
+    bookName: String
+}
+
+input IndustryReportUpdateInput {
+    id: ID!
+    text: String
+    description: String
+    industryName: String
+}
+
+input SpecificationUpdateInput {
+    id: ID!
+    text: String
+    description: String
+    specificationName: String
+}
+
+input BookCreateInput {
+    text: String!
+    description: String!
+    bookName: String!
+}
+
+input IndustryReportCreateInput {
+    text: String!
+    description: String!
+    industryName: String!
+}
+
+input SpecificationCreateInput {
+    text: String!
+    description: String!
+    specificationName: String!
+}
+
+type BookData {
+    items: [Book]!
+    total: Int
+}
+
+type SpecificationData {
+    items: [Specification]!
+    total: Int
+}
+
+type IndustryReportData {
+    items: [IndustryReport]!
+    total: Int
+}
+
+type ProductItemData {
+    items: [ProductItem]!
+    total: Int
+}
+
+type ProductModelItemData {
+    items: [ProductModelItem]!
+    total: Int
+}
+
+type DescriptionData {
+    items: [Description]!
+    total: Int
+}
+
+type ProductModelItem {
+    id: ID!
+    modelName: String!
+    descriptions: [Description]
+    resources: Resources
+}
+
+type ProductItem {
+    id: ID!
+    productName: String!
+    productModels:[ProductModelItem]
+}
+
+type Description {
+    modelId: ID
+    descriptionLine: String
+}
+
+type Resources {
+    book: Book
+    industryReport: IndustryReport
+    specification: Specification
+}
+
+type Book {
+    id: ID!
+    text: String!
+    description: String!
+    bookName: String!
+}
+
+type IndustryReport {
+    id: ID!
+    text: String!
+    description: String!
+    industryName: String!
+}
+
+type Specification {
+    id: ID!
+    text: String!
+    description: String!
+    specificationName: String!
+}

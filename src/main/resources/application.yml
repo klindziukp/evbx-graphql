@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: evbx-graphql
+  servlet:
+    multipart:
+      enabled: true
+      location: /tmp
+server:
+  port: 8000
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+services:
+  product:
+    baseUrl: http://localhost:8001
+    username: admin
+    password: admin
+    productsPath: "/v1/evbx/products/"
+    productModelsPath: "/v1/evbx/product-models/"
+    descriptionsPath: "/v1/evbx/descriptions/"
+  resource:
+    baseUrl: http://localhost:8002
+    username: admin
+    password: admin
+    booksPath: "/v1/evbx/e-books/"
+    specificationsPath: "/v1/evbx/specifications/"
+    industryReportPath: "/v1/evbx/industry-reports/"
