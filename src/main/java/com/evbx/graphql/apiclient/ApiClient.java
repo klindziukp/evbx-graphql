@@ -99,7 +99,7 @@ public final class ApiClient {
         } catch (HttpStatusCodeException httpEx) {
             throwUpdatedException(httpEx);
         }
-        throw new ApiClientMappingException("Unable to execute POST request to: " + path);
+        throw new ApiClientMappingException("Unable to execute PATCH request to: " + path);
     }
 
     /**

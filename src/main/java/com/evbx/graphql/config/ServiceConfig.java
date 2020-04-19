@@ -12,8 +12,10 @@ public class ServiceConfig {
 
     @Value("${baseUrl}")
     private String baseUrl;
+
     @Value("${username}")
     private String userName;
+
     @Value("${password}")
     private String password;
 }
