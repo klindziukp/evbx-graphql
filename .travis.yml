@@ -1,0 +1,14 @@
+env:
+language: java
+jdk:
+  - openjdk8
+addons:
+  sonarcloud:
+    organization: klindziukp-github
+    token:
+      secure: WE0OUB5AWS7Oyvc5anti21rOaI5O23OLaGZTjUzNXU8OOwUMkMx34bgSWaMb3iKEFc0LadsDxKo1Hi39gDe0xK1MyYCgnh9IZ6PJmzAKM/FkSJCcaoyxffGoAMSJgQKhx98EykfkGeHDFeZSal31SDEcLfV2ZakcWDNxYJrt2I4OGRQEykOEJr/jnAgIgRCQ9kliaybC4unmrZj5tV/1EjTVSDAQW6JlFaaOHVQgcgpWUFuEgU3z+xnUXNLsdTTYAWG7Y3OzYBS9SVjOD0X1PqoHDKsxwuhy0W99GgEypd6YCUXa4zW8FAx/2b9ZJT4Fnuc10gYLxz1fPBl01UtuZM0c420SbKqlHIFGpuWgeuqeGdgogcmmXRwEfaExsFZ2jx44SBrKZO9oeSFsE2PK+89BSH6j6vVo9RAF5aK3WmyMdfm1MrOWJ6EvU1DKIxnLqh/+m9KEQPRcyX5+v6wCGMjAhf0uLz6Y0HLjPqFrpX5/oeURPjeWmzMK9VB1IDIOpDPCBVEHBJ3YSHFbeu+4cWZ3sm4kHA6XSi0bXzEJo7wLd7B6qZSK6p6SxpljdY6Ckabcue2mQvcRi76vcx/m57drn7uwl1vXrCMBvwXYxXir1rwZo1gZuz6K03ot55yw0T3ibCvPw0c9F4ZdExjeC0qr0HqLSNskIc9gJQD0pa0=
+before_install:
+  - chmod +x gradlew
+script:
+  - ./gradlew build -i --continue
+  - ./gradlew sonarqube
