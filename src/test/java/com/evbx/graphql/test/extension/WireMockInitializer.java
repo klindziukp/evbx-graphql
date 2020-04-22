@@ -20,9 +20,8 @@ public class WireMockInitializer implements ApplicationContextInitializer<Config
                 wireMockServer.stop();
             }
         });
-
-        TestPropertyValues.of
-                ("services.product.baseUrl=" + "http://localhost:" + wireMockServer.port(),
+        TestPropertyValues.of(
+                 "services.product.baseUrl=" + "http://localhost:" + wireMockServer.port(),
                  "services.resource.baseUrl=" + "http://localhost:" + wireMockServer.port())
                 .applyTo(configurableApplicationContext);
     }

@@ -15,7 +15,7 @@ public class AllDescriptionsDataFetcher extends BaseDataFetcher implements DataF
 
     @Override
     public ItemData<Description> get(DataFetchingEnvironment environment) {
-        return productApiClient().get(productServiceConfig.getProductsPath(),
+        return productApiClient().get(productServiceConfig.getDescriptionsPath(),
                 new ParameterizedTypeReference<ItemData<Description>>() {});
     }
 }

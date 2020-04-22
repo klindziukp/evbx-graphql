@@ -42,7 +42,7 @@ test {
 
 sonarqube {
 	properties {
-		property "sonar.projectKey", "klindziukp_evbx-product"
+		property "sonar.projectKey", "klindziukp_evbx-graphql"
 		property "sonar.exclusions", "**/apiclient/**,**/config/**,**/exception/**,**/model/**,**/util/**,**/EvbxGraphqlApplication.java"
 	}
 }
