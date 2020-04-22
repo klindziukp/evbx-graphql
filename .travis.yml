@@ -1,4 +1,6 @@
 env:
+  global:
+    - CODECOV_TOKEN=578502c7-453b-4fb7-866e-62c7506417d7
 language: java
 jdk:
   - openjdk8
@@ -12,3 +14,5 @@ before_install:
 script:
   - ./gradlew build -i --continue
   - ./gradlew sonarqube
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
