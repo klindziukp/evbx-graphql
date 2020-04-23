@@ -63,4 +63,12 @@ public abstract class BaseTest {
         this.wireMockServer.stubFor(WireMock.patch(urlPattern).willReturn(
                 aResponse().withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE).withBody(jsonString)));
     }
+
+    protected void stubWireMockServerErrorForPatch(String urlPath, String jsonString) {
+        StringValuePattern stringValuePattern = new RegexPattern(urlPath);
+        UrlPattern urlPattern = new UrlPattern(stringValuePattern, true);
+        this.wireMockServer.stubFor(WireMock.patch(urlPattern).willReturn(
+                aResponse().withStatus(404).withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                        .withBody(jsonString)));
+    }
 }

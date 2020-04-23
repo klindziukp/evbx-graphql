@@ -28,6 +28,10 @@ class UpdateSpecificationDataFetcherTest extends BaseTest {
     private static final String SPEC_JSON_STRING
             = "{\"id\":100,\"specificationName\":\"spec-name-X\",\"description\":\"description-X\",\"text\":\"text-X\"}";
 
+    private static final String ERROR_JSON_STRING = "{\"timestamp\":\"2020-04-23T07:36:16.080+0000\"," +
+            "\"status\":404,\"error\":\"Not Found\"," +
+            "\"message\":\"'Specification' item not found with id = 777\",\"path\":\"/v1/evbx/specifications/777\"}";
+
     @Test
     void updateSpecificationDataFetcherTest() {
         __GIVEN();
@@ -41,6 +45,25 @@ class UpdateSpecificationDataFetcherTest extends BaseTest {
         Assertions.assertThat(specification).isNotNull();
         Assertions.assertThat(specification)
                 .isEqualToComparingFieldByField(JsonUtil.fromJson(SPEC_JSON_STRING, Specification.class));
+    }
+
+    @Test
+    void UpdateSpecificationDataFetcherErrorTest() {
+        __GIVEN();
+        when(dataFetchingEnvironment.getArgument("input")).thenReturn(inputMockErrorMap());
+        stubWireMockServerErrorForPatch(resourceServiceConfig.getSpecificationsPath() + inputMockErrorMap().get("id"),
+                ERROR_JSON_STRING);
+        __WHEN();
+        String errorMessage = updateSpecificationDataFetcher.get(dataFetchingEnvironment).getErrors().get(0)
+                .getMessage();
+        __THEN();
+        Assertions.assertThat(errorMessage).isEqualTo("'Specification' item not found with id = 777");
+    }
+
+    private Map<String, Object> inputMockErrorMap() {
+        Map<String, Object> inputMap = new HashMap<>();
+        inputMap.put("id", 777L);
+        return inputMap;
     }
 
     private Map<String, Object> inputMockMap() {

@@ -24,6 +24,10 @@ class UpdateProductModelDataFetcherTest extends BaseTest {
 
     private static final String PRODUCT_MODEL_JSON_STRING = "{\"id\":102,\"modelName\":\"Patched model name\"}";
 
+    private static final String ERROR_JSON_STRING = "{\"timestamp\":\"2020-04-23T07:36:16.080+0000\"," +
+            "\"status\":404,\"error\":\"Not Found\"," +
+            "\"message\":\"'Product model' item not found with id = 777\",\"path\":\"/v1/evbx/product-models/777\"}";
+
     @Test
     void updateProductModelDataFetcherTest() {
         __GIVEN();
@@ -36,6 +40,25 @@ class UpdateProductModelDataFetcherTest extends BaseTest {
         Assertions.assertThat(productModelDto).isNotNull();
         Assertions.assertThat(productModelDto)
                 .isEqualToComparingFieldByField(JsonUtil.fromJson(PRODUCT_MODEL_JSON_STRING, ProductModelDto.class));
+    }
+
+    @Test
+    void updateProductModelDataFetcherErrorTest() {
+        __GIVEN();
+        when(dataFetchingEnvironment.getArgument("input")).thenReturn(inputMockErrorMap());
+        stubWireMockServerErrorForPatch(productServiceConfig.getProductModelsPath() + inputMockErrorMap().get("id"),
+                ERROR_JSON_STRING);
+        __WHEN();
+        String errorMessage = updateProductModelDataFetcher.get(dataFetchingEnvironment).getErrors().get(0)
+                .getMessage();
+        __THEN();
+        Assertions.assertThat(errorMessage).isEqualTo("'Product model' item not found with id = 777");
+    }
+
+    private Map<String, Object> inputMockErrorMap() {
+        Map<String, Object> inputMap = new HashMap<>();
+        inputMap.put("id", 777L);
+        return inputMap;
     }
 
     private Map<String, Object> inputMockMap() {

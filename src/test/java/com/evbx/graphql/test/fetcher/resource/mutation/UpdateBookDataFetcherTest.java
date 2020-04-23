@@ -26,6 +26,10 @@ class UpdateBookDataFetcherTest extends BaseTest {
     private static final String BOOK_JSON_STRING
             = "{\"id\":100,\"bookName\":\"book-name-X\",\"description\":\"description-X\",\"text\":\"text-X\"}";
 
+    private static final String ERROR_JSON_STRING ="{\"timestamp\":\"2020-04-23T07:36:16.080+0000\"," +
+            "\"status\":404,\"error\":\"Not Found\"," +
+            "\"message\":\"'Book' item not found with id = 777\",\"path\":\"/v1/evbx/e-books/777\"}";
+
     @Test
     void updateBookDataFetcherTest() {
         __GIVEN();
@@ -36,6 +40,24 @@ class UpdateBookDataFetcherTest extends BaseTest {
         __THEN();
         Assertions.assertThat(book).isNotNull();
         Assertions.assertThat(book).isEqualToComparingFieldByField(JsonUtil.fromJson(BOOK_JSON_STRING, Book.class));
+    }
+
+    @Test
+    void updateBookDataFetcherErrorTest() {
+        __GIVEN();
+        when(dataFetchingEnvironment.getArgument("input")).thenReturn(inputMockErrorMap());
+        stubWireMockServerErrorForPatch(resourceServiceConfig.getBooksPath() + inputMockErrorMap().get("id"),
+                ERROR_JSON_STRING);
+        __WHEN();
+        String errorMessage = updateBookDataFetcher.get(dataFetchingEnvironment).getErrors().get(0).getMessage();
+        __THEN();
+        Assertions.assertThat(errorMessage).isEqualTo("'Book' item not found with id = 777");
+    }
+
+    private Map<String, Object> inputMockErrorMap() {
+        Map<String, Object> inputMap = new HashMap<>();
+        inputMap.put("id", 777L);
+        return inputMap;
     }
 
     private Map<String, Object> inputMockMap() {
