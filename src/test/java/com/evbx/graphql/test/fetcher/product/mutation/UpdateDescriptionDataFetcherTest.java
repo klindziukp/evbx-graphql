@@ -25,7 +25,7 @@ class UpdateDescriptionDataFetcherTest extends BaseTest {
     private static final String DESCRIPTION_JSON_STRING
             = "{\"id\":101,\"modelId\":101,\"descriptionLine\":\"Patched Desc line\"}";
 
-    private static final String ERROR_JSON_STRING ="{\"timestamp\":\"2020-04-23T07:36:16.080+0000\"," +
+    private static final String ERROR_JSON_STRING = "{\"timestamp\":\"2020-04-23T07:36:16.080+0000\"," +
             "\"status\":404,\"error\":\"Not Found\"," +
             "\"message\":\"'Description Line' item not found with id = 777\",\"path\":\"/v1/evbx/descriptions/777\"}";
 
@@ -46,8 +46,8 @@ class UpdateDescriptionDataFetcherTest extends BaseTest {
     @Test
     void updateDescriptionDataFetcherErrorTest() {
         __GIVEN();
-        when(dataFetchingEnvironment.getArgument("input")).thenReturn(inputMockErrorMap());
-        stubWireMockServerErrorForPatch(productServiceConfig.getDescriptionsPath() + inputMockErrorMap().get("id"),
+        when(dataFetchingEnvironment.getArgument("input")).thenReturn(inputMockPatchErrorMap());
+        stubWireMockServerErrorForPatch(productServiceConfig.getDescriptionsPath() + inputMockPatchErrorMap().get("id"),
                 ERROR_JSON_STRING);
         __WHEN();
         String errorMessage = updateDescriptionDataFetcher.get(dataFetchingEnvironment).getErrors().get(0).getMessage();
@@ -60,12 +60,6 @@ class UpdateDescriptionDataFetcherTest extends BaseTest {
         inputMap.put("id", 101L);
         inputMap.put("modelId", 101L);
         inputMap.put("descriptionLine", "Patched Desc line");
-        return inputMap;
-    }
-
-    private Map<String, Object> inputMockErrorMap() {
-        Map<String, Object> inputMap = new HashMap<>();
-        inputMap.put("id", 777L);
         return inputMap;
     }
 }

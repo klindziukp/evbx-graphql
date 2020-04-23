@@ -28,7 +28,7 @@ class UpdateIndustryReportDataFetcherTest extends BaseTest {
     private static final String REPORT_JSON_STRING
             = "{\"id\":100,\"industryName\":\"industry-name-X\",\"description\":\"description-X\",\"text\":\"text-X\"}";
 
-    private static final String ERROR_JSON_STRING ="{\"timestamp\":\"2020-04-23T07:36:16.080+0000\"," +
+    private static final String ERROR_JSON_STRING = "{\"timestamp\":\"2020-04-23T07:36:16.080+0000\"," +
             "\"status\":404,\"error\":\"Not Found\"," +
             "\"message\":\"'Industry Report' item not found with id = 777\",\"path\":\"/v1/evbx/industry-reports/777\"}";
 
@@ -50,19 +50,14 @@ class UpdateIndustryReportDataFetcherTest extends BaseTest {
     @Test
     void UpdateIndustryReportDataFetcherErrorTest() {
         __GIVEN();
-        when(dataFetchingEnvironment.getArgument("input")).thenReturn(inputMockErrorMap());
-        stubWireMockServerErrorForPatch(resourceServiceConfig.getIndustryReportPath() + inputMockErrorMap().get("id"),
-                ERROR_JSON_STRING);
+        when(dataFetchingEnvironment.getArgument("input")).thenReturn(inputMockPatchErrorMap());
+        stubWireMockServerErrorForPatch(
+                resourceServiceConfig.getIndustryReportPath() + inputMockPatchErrorMap().get("id"), ERROR_JSON_STRING);
         __WHEN();
-        String errorMessage = updateIndustryReportDataFetcher.get(dataFetchingEnvironment).getErrors().get(0).getMessage();
+        String errorMessage = updateIndustryReportDataFetcher.get(dataFetchingEnvironment).getErrors().get(0)
+                .getMessage();
         __THEN();
         Assertions.assertThat(errorMessage).isEqualTo("'Industry Report' item not found with id = 777");
-    }
-
-    private Map<String, Object> inputMockErrorMap() {
-        Map<String, Object> inputMap = new HashMap<>();
-        inputMap.put("id", 777L);
-        return inputMap;
     }
 
     private Map<String, Object> inputMockMap() {

@@ -45,19 +45,13 @@ class UpdateBookDataFetcherTest extends BaseTest {
     @Test
     void updateBookDataFetcherErrorTest() {
         __GIVEN();
-        when(dataFetchingEnvironment.getArgument("input")).thenReturn(inputMockErrorMap());
-        stubWireMockServerErrorForPatch(resourceServiceConfig.getBooksPath() + inputMockErrorMap().get("id"),
+        when(dataFetchingEnvironment.getArgument("input")).thenReturn(inputMockPatchErrorMap());
+        stubWireMockServerErrorForPatch(resourceServiceConfig.getBooksPath() + inputMockPatchErrorMap().get("id"),
                 ERROR_JSON_STRING);
         __WHEN();
         String errorMessage = updateBookDataFetcher.get(dataFetchingEnvironment).getErrors().get(0).getMessage();
         __THEN();
         Assertions.assertThat(errorMessage).isEqualTo("'Book' item not found with id = 777");
-    }
-
-    private Map<String, Object> inputMockErrorMap() {
-        Map<String, Object> inputMap = new HashMap<>();
-        inputMap.put("id", 777L);
-        return inputMap;
     }
 
     private Map<String, Object> inputMockMap() {

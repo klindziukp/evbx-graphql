@@ -45,8 +45,8 @@ class UpdateProductDataFetcherTest extends BaseTest {
     @Test
     void updateProductDataFetcherErrorTest() {
         __GIVEN();
-        when(dataFetchingEnvironment.getArgument("input")).thenReturn(inputMockErrorMap());
-        stubWireMockServerErrorForPatch(productServiceConfig.getProductsPath() + inputMockErrorMap().get("id"),
+        when(dataFetchingEnvironment.getArgument("input")).thenReturn(inputMockPatchErrorMap());
+        stubWireMockServerErrorForPatch(productServiceConfig.getProductsPath() + inputMockPatchErrorMap().get("id"),
                 ERROR_JSON_STRING);
         __WHEN();
         String errorMessage = updateProductDataFetcher.get(dataFetchingEnvironment).getErrors().get(0).getMessage();
@@ -58,12 +58,6 @@ class UpdateProductDataFetcherTest extends BaseTest {
         Map<String, Object> inputMap = new HashMap<>();
         inputMap.put("id", 103L);
         inputMap.put("productName", "Patched product name");
-        return inputMap;
-    }
-
-    private Map<String, Object> inputMockErrorMap() {
-        Map<String, Object> inputMap = new HashMap<>();
-        inputMap.put("id", 777L);
         return inputMap;
     }
 }

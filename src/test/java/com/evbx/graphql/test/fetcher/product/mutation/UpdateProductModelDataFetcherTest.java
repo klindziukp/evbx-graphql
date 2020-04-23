@@ -45,20 +45,14 @@ class UpdateProductModelDataFetcherTest extends BaseTest {
     @Test
     void updateProductModelDataFetcherErrorTest() {
         __GIVEN();
-        when(dataFetchingEnvironment.getArgument("input")).thenReturn(inputMockErrorMap());
-        stubWireMockServerErrorForPatch(productServiceConfig.getProductModelsPath() + inputMockErrorMap().get("id"),
-                ERROR_JSON_STRING);
+        when(dataFetchingEnvironment.getArgument("input")).thenReturn(inputMockPatchErrorMap());
+        stubWireMockServerErrorForPatch(
+                productServiceConfig.getProductModelsPath() + inputMockPatchErrorMap().get("id"), ERROR_JSON_STRING);
         __WHEN();
         String errorMessage = updateProductModelDataFetcher.get(dataFetchingEnvironment).getErrors().get(0)
                 .getMessage();
         __THEN();
         Assertions.assertThat(errorMessage).isEqualTo("'Product model' item not found with id = 777");
-    }
-
-    private Map<String, Object> inputMockErrorMap() {
-        Map<String, Object> inputMap = new HashMap<>();
-        inputMap.put("id", 777L);
-        return inputMap;
     }
 
     private Map<String, Object> inputMockMap() {

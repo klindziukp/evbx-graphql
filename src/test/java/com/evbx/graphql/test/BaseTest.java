@@ -1,5 +1,8 @@
 package com.evbx.graphql.test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -57,6 +60,12 @@ public abstract class BaseTest {
                 aResponse().withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE).withBody(jsonString)));
     }
 
+    protected void stubWireMockServerErrorForPost(String urlPath, String jsonString) {
+        this.wireMockServer.stubFor(WireMock.post(urlPath).willReturn(
+                aResponse().withStatus(400).withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                        .withBody(jsonString)));
+    }
+
     protected void stubWireMockServerForPatch(String urlPath, String jsonString) {
         StringValuePattern stringValuePattern = new RegexPattern(urlPath);
         UrlPattern urlPattern = new UrlPattern(stringValuePattern, true);
@@ -70,5 +79,17 @@ public abstract class BaseTest {
         this.wireMockServer.stubFor(WireMock.patch(urlPattern).willReturn(
                 aResponse().withStatus(404).withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                         .withBody(jsonString)));
+    }
+
+    protected Map<String, Object> inputMockPatchErrorMap() {
+        Map<String, Object> inputMap = new HashMap<>();
+        inputMap.put("id", 777L);
+        return inputMap;
+    }
+
+    protected Map<String, Object> inputMockPostErrorMap() {
+        Map<String, Object> inputMap = new HashMap<>();
+        inputMap.put("invalidField", "invalidField");
+        return inputMap;
     }
 }

@@ -24,6 +24,10 @@ class CreateProductDataFetcherTest extends BaseTest {
 
     private static final String PRODUCT_JSON_STRING = "{\"productName\":\"product-name-1\"}";
 
+    private static final String ERROR_JSON_STRING = "{\"timestamp\":\"2020-04-23T09:02:37.107Z\",\"status\":400," +
+            "\"error\":\"Bad Request\",\"errorMessages\":[\"'productName' is mandatory field.\"]," +
+            "\"message\":\"Validation failed\",\"path\":\"/v1/evbx/products\"}";
+
     @Test
     void createProductDataFetcherTest() {
         __GIVEN();
@@ -35,6 +39,18 @@ class CreateProductDataFetcherTest extends BaseTest {
         Assertions.assertThat(productDto).isNotNull();
         Assertions.assertThat(productDto)
                 .isEqualToComparingFieldByField(JsonUtil.fromJson(PRODUCT_JSON_STRING, ProductDto.class));
+    }
+
+    @Test
+    void createProductDataFetcherErrorTest() {
+        __GIVEN();
+        when(dataFetchingEnvironment.getArgument("input")).thenReturn(inputMockPostErrorMap());
+        stubWireMockServerErrorForPost(productServiceConfig.getProductsPath(), ERROR_JSON_STRING);
+        __WHEN();
+        String errorMessage = createProductDataFetcher.get(dataFetchingEnvironment).getErrors().get(0).getMessage();
+        __THEN();
+        Assertions.assertThat(errorMessage)
+                .isEqualTo("['productName' is mandatory field.]");
     }
 
     private Map<String, Object> inputMockMap() {

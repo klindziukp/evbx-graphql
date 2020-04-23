@@ -25,6 +25,11 @@ class CreateSpecificationDataFetcherTest extends BaseTest {
     private static final String SPEC_JSON_STRING
             = "{\"specificationName\":\"spec-name-0\",\"description\":\"description-0\",\"text\":\"text-0\"}";
 
+    private static final String ERROR_JSON_STRING = "{\"timestamp\":\"2020-04-23T09:11:48.537Z\",\"status\":400," +
+            "\"error\":\"Bad Request\",\"errorMessages\":[\"'description' is mandatory field.\"," +
+            "\"'specificationName' is mandatory field.\",\"'text' is mandatory field.\"]," +
+            "\"message\":\"Validation failed\",\"path\":\"/v1/evbx/specifications\"}";
+
     @Test
     void createSpecificationDataFetcherTest() {
         __GIVEN();
@@ -36,6 +41,19 @@ class CreateSpecificationDataFetcherTest extends BaseTest {
         Assertions.assertThat(specification).isNotNull();
         Assertions.assertThat(specification)
                 .isEqualToComparingFieldByField(JsonUtil.fromJson(SPEC_JSON_STRING, Specification.class));
+    }
+
+    @Test
+    void createSpecificationDataFetcherErrorTest() {
+        __GIVEN();
+        when(dataFetchingEnvironment.getArgument("input")).thenReturn(inputMockPostErrorMap());
+        stubWireMockServerErrorForPost(resourceServiceConfig.getSpecificationsPath(), ERROR_JSON_STRING);
+        __WHEN();
+        String errorMessage = createSpecificationDataFetcher.get(dataFetchingEnvironment).getErrors().get(0)
+                .getMessage();
+        __THEN();
+        Assertions.assertThat(errorMessage).isEqualTo(
+                "['description' is mandatory field., 'specificationName' is mandatory field., 'text' is mandatory field.]");
     }
 
     private Map<String, Object> inputMockMap() {

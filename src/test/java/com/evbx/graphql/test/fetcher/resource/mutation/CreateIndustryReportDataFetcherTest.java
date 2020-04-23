@@ -25,6 +25,10 @@ class CreateIndustryReportDataFetcherTest extends BaseTest {
     private static final String REPORT_JSON_STRING
             = "{\"industryName\":\"industry-name-0\",\"description\":\"description-0\",\"text\":\"text-0\"}";
 
+    private static final String ERROR_JSON_STRING = "{\"timestamp\":\"2020-04-23T09:12:40.749Z\",\"status\":400," +
+            "\"error\":\"Bad Request\",\"errorMessages\":[\"'industryName' is mandatory field.\",\"'text' is mandatory field.\"," +
+            "\"'description' is mandatory field.\"],\"message\":\"Validation failed\",\"path\":\"/v1/evbx/industry-reports\"}";
+
     @Test
     void createIndustryReportDataFetcherTest() {
         __GIVEN();
@@ -36,6 +40,19 @@ class CreateIndustryReportDataFetcherTest extends BaseTest {
         Assertions.assertThat(industryReport).isNotNull();
         Assertions.assertThat(industryReport)
                 .isEqualToComparingFieldByField(JsonUtil.fromJson(REPORT_JSON_STRING, IndustryReport.class));
+    }
+
+    @Test
+    void createIndustryReportDataFetcherErrorTest() {
+        __GIVEN();
+        when(dataFetchingEnvironment.getArgument("input")).thenReturn(inputMockPostErrorMap());
+        stubWireMockServerErrorForPost(resourceServiceConfig.getIndustryReportPath(), ERROR_JSON_STRING);
+        __WHEN();
+        String errorMessage = createIndustryReportDataFetcher.get(dataFetchingEnvironment).getErrors().get(0)
+                .getMessage();
+        __THEN();
+        Assertions.assertThat(errorMessage)
+                .isEqualTo("['industryName' is mandatory field., 'text' is mandatory field., 'description' is mandatory field.]");
     }
 
     private Map<String, Object> inputMockMap() {
