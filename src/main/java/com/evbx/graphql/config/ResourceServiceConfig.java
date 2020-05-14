@@ -13,7 +13,8 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Configuration
-@PropertySource("classpath:application.yml")
+@PropertySource(value = "classpath:application.yml", ignoreResourceNotFound = true)
+@PropertySource(value = "classpath:application-docker.yml", ignoreResourceNotFound = true)
 @Data
 @ConfigurationProperties(prefix = "services.resource")
 public class ResourceServiceConfig extends ServiceConfig {
