@@ -9,5 +9,4 @@ public class EvbxGraphqlApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EvbxGraphqlApplication.class, args);
 	}
-
 }

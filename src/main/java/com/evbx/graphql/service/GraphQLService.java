@@ -1,7 +1,7 @@
 package com.evbx.graphql.service;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -77,8 +77,8 @@ public class GraphQLService {
 
     @Bean
     public GraphQLSchema schema() throws IOException {
-        File file = resource.getFile();
-        TypeDefinitionRegistry tr = new SchemaParser().parse(file);
+        InputStream inputStream = resource.getInputStream();
+        TypeDefinitionRegistry tr = new SchemaParser().parse(inputStream);
         RuntimeWiring rw = buildRuntimeWiring();
         return new SchemaGenerator().makeExecutableSchema(tr, rw);
     }
