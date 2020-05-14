@@ -10,8 +10,8 @@ import java.util.List;
 @Accessors(chain = true)
 public class ProductDto {
 
-    @JsonProperty("productId")
-    private Long productId;
+    @JsonProperty("id")
+    private Long id;
 
     @JsonProperty("productName")
     private String productName;
