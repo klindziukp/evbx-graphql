@@ -151,7 +151,7 @@ public final class ApiClient {
     }
 
     private RequestConfig requestConfig() {
-        int timeoutInMs = 3000;
+        int timeoutInMs = 10000;
         return RequestConfig.custom().setConnectTimeout(timeoutInMs).setConnectionRequestTimeout(timeoutInMs)
                 .setSocketTimeout(timeoutInMs).build();
     }
