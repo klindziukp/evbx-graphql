@@ -56,7 +56,7 @@ services:
     ..
     . 
   resource:
-    baseUrl: http://localhost:8001        ## or your custom url for 'evbx-resource' server
+    baseUrl: http://localhost:8002        ## or your custom url for 'evbx-resource' server
     username: admin                       ## or your custom username for 'evbx-resource' server
     password: admin                       ## or your custom password for 'evbx-resource' server
     ...
